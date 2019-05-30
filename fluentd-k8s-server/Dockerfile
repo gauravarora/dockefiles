@@ -1,10 +1,10 @@
-FROM fluent/fluentd:v1.3-debian-onbuild
-
+FROM fluent/fluentd:v1.4-debian-onbuild
+USER root
 RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
  && apt-get update \
  && apt-get install -y --no-install-recommends $buildDeps \
  && sudo gem install \
-        fluent-plugin-rewrite-tag-filter \
+        fluent-plugin-rewrite-tag-filter fluent-plugin-elasticsearch \
  && sudo gem sources --clear-all \
  && SUDO_FORCE_REMOVE=yes \
     apt-get purge -y --auto-remove \
@@ -12,3 +12,4 @@ RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
                   $buildDeps \
  && rm -rf /var/lib/apt/lists/* \
            /home/fluent/.gem/ruby/2.3.0/cache/*.gem
+USER 1001
